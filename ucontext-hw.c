@@ -121,6 +121,7 @@
 #include <sys/time.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <ucontext.h>
 
 #define INTERVAL_SECS 		1
 #define INTERVAL_MICROSECS 	0
