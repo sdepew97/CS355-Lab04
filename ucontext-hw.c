@@ -40,16 +40,16 @@ static ucontext_t ctx[3];
 
 static void
 f1 (void) {
-    puts("start f1");
+   // puts("start f1");
     swapcontext(&ctx[1], &ctx[2]);
-    puts("finish f1");
+    //puts("finish f1");
 }
 
 static void
 f2 (void) {
-    puts("start f2");
+   // puts("start f2");
     swapcontext(&ctx[2], &ctx[1]);
-    puts("finish f2");
+   // puts("finish f2");
 }
 
 
