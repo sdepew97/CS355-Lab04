@@ -78,13 +78,30 @@
 //    return 0;
 //}
 
+//#include <stdio.h>
+//#include <ucontext.h>
+//#include <unistd.h>
+//
+//int main(int argc, const char *argv[]){
+//    ucontext_t main;
+//    printf("start\n");
+//    getcontext(&main);
+//    puts("Hello world\n");
+//    sleep(1);
+//    setcontext(&main);
+//    printf("end");
+//    return 0;
+//}
+
+//3. What happens when a signal is delivered? How do signals affect the execution of a context?
 #include <stdio.h>
 #include <ucontext.h>
 #include <unistd.h>
 
 int main(int argc, const char *argv[]){
     ucontext_t main;
-    printf("start");
+    alarm(10);
+    printf("start\n");
     getcontext(&main);
     puts("Hello world\n");
     sleep(1);
