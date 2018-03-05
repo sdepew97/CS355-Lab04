@@ -40,16 +40,16 @@ static ucontext_t ctx[3];
 
 static void
 f1 (void) {
-   // puts("start f1");
+    puts("start f1");
     swapcontext(&ctx[1], &ctx[2]);
-    //puts("finish f1");
+    puts("finish f1");
 }
 
 static void
 f2 (void) {
-   // puts("start f2");
+    puts("start f2");
     swapcontext(&ctx[2], &ctx[1]);
-   // puts("finish f2");
+    puts("finish f2");
 }
 
 
@@ -62,7 +62,7 @@ main (void) {
     getcontext(&ctx[1]);
     ctx[1].uc_stack.ss_sp = st1;
     ctx[1].uc_stack.ss_size = sizeof st1;
-    ctx[1].uc_link = &ctx[2]; //was &ctx[0]
+    ctx[1].uc_link = NULL; //was &ctx[0]
     makecontext(&ctx[1], f1, 0);
 
 
@@ -73,7 +73,8 @@ main (void) {
     makecontext(&ctx[2], f2, 0);
 
 
-    swapcontext(&ctx[0], &ctx[2]);
+    //swapcontext(&ctx[0], &ctx[2]);
+    stcontext(&ctx[1]);
     printf("hello world\n");
     return 0;
 }
