@@ -111,6 +111,7 @@
 //}
 
 //4. Can you write a program that alternates between two functions at a set interval? Recall the kernel timer lab we did.
+
 /*
 	File:	kt_frame.c
 	Frame for the kernel timer lab exercise
@@ -182,13 +183,17 @@ int main(int argc, char **argv) {
 
 
 static void f1 (void) {
-    printf("function 1\n");
-    pause();
+    while(1) {
+        printf("function 1\n");
+        pause();
+    }
 }
 
 static void f2 (void) {
-    puts("function 2\n");
-    pause();
+    while(1) {
+        puts("function 2\n");
+        pause();
+    }
 }
 
 /*
