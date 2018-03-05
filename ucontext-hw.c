@@ -24,6 +24,7 @@ int main(int argc, char *argv[]){
   
   makecontext(&uc, f, 0);
   setcontext(&uc);
+  printf("Back in main\n");
   perror("setcontext"); //setcontext() doesn’t return on success
   return 0;
 }
