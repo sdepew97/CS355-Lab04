@@ -177,6 +177,7 @@ int main(int argc, char **argv) {
     makecontext(&ctx[2], f2, 0);
 
     //swapcontext(&ctx[0], &ctx[1]);
+    sleep(1);
 
     return 0;
 }
