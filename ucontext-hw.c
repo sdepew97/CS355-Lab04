@@ -94,18 +94,127 @@
 //}
 
 //3. What happens when a signal is delivered? How do signals affect the execution of a context?
-#include <stdio.h>
-#include <ucontext.h>
-#include <unistd.h>
+//#include <stdio.h>
+//#include <ucontext.h>
+//#include <unistd.h>
+//
+//int main(int argc, const char *argv[]){
+//    ucontext_t main;
+//    alarm(10);
+//    printf("start\n");
+//    getcontext(&main);
+//    puts("Hello world\n");
+//    sleep(1);
+//    setcontext(&main);
+//    printf("end");
+//    return 0;
+//}
 
-int main(int argc, const char *argv[]){
-    ucontext_t main;
-    alarm(10);
-    printf("start\n");
-    getcontext(&main);
-    puts("Hello world\n");
-    sleep(1);
-    setcontext(&main);
-    printf("end");
+//4. Can you write a program that alternates between two functions at a set interval? Recall the kernel timer lab we did.
+/*
+	File:	kt_frame.c
+	Frame for the kernel timer lab exercise
+*/
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <signal.h>
+#include <stdlib.h>
+
+#define INTERVAL_SECS 		1
+#define INTERVAL_MICROSECS 	0
+#define VALUE_SECS 		1
+#define VALUE_MICROSECS 	0
+#define	MICROS 			1000000
+
+int numSwitches;
+
+void setrtimer(struct itimerval *);
+void catchsig(int);
+void showtime(struct itimerval *);
+void age(const struct timeval *);
+static void f1 (void);
+static void f2 (void);
+static ucontext_t ctx[3];
+
+int main(int argc, char **argv) {
+    struct itimerval realt;
+    struct timeval start;
+
+    char st1[8192];
+    char st2[8192];
+
+    if (argc > 1) {
+        printf("Usage: %s takes no arguments, ctrl-c to quit\n", argv[0]);
+        exit(0);
+    }
+
+    gettimeofday(&start, NULL);
+    setrtimer(&realt);
+
+    if (setitimer(ITIMER_REAL, &realt, NULL) == -1) {
+        perror("error calling setitimer()");
+        exit(1);
+    }
+
+    //send signal once every second...
+    signal(SIGALRM, catchsig);
+
+    getcontext(&ctx[1]);
+    ctx[1].uc_stack.ss_sp = st1;
+    ctx[1].uc_stack.ss_size = sizeof st1;
+    ctx[1].uc_link = NULL; //was &ctx[0]
+    makecontext(&ctx[1], f1, 0);
+
+
+    getcontext(&ctx[2]);
+    ctx[2].uc_stack.ss_sp = st2;
+    ctx[2].uc_stack.ss_size = sizeof st2;
+    ctx[2].uc_link = &ctx[1];
+    makecontext(&ctx[2], f2, 0);
+
+    swapcontext(&ctx[0], &ctx[1]);
+
     return 0;
+}
+
+
+static void f1 (void) {
+    printf("function 1\n");
+    pause();
+}
+
+static void f2 (void) {
+    puts("function 2\n");
+    pause();
+}
+
+/*
+  Initialize the ITIMER_REAL interval timer.
+  Its interval is one second.  Its initial value is one second.
+*/
+void setrtimer(struct itimerval *ivPtr) {
+    ivPtr->it_interval.tv_sec = INTERVAL_SECS;
+    ivPtr->it_interval.tv_usec = INTERVAL_MICROSECS;
+    ivPtr->it_value.tv_sec = VALUE_SECS;
+    ivPtr->it_interval.tv_usec = VALUE_MICROSECS;
+}
+
+/*
+  Define a signal handler for a real interval timer.
+  Increment the global realSeconds;
+  Reset the handler for SIGALRM.
+*/
+void catchsig(int sig) {
+    numSwitches++;
+    printf("caught SIGALARM\n");
+    if(numSwitches%2==0) {
+        swapcontext(&ctx[2], &ctx[1]);
+    }
+    else {
+        swapcontext(&ctx[1], &ctx[2]);
+    }
+
+    signal(SIGALRM, catchsig);
 }
