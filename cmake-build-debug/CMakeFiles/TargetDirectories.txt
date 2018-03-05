@@ -1,0 +1,3 @@
+/Users/Sarah/Library/Mobile Documents/com~apple~CloudDocs/Spring 2018/Operating Systems/Lab4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/Sarah/Library/Mobile Documents/com~apple~CloudDocs/Spring 2018/Operating Systems/Lab4/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/Sarah/Library/Mobile Documents/com~apple~CloudDocs/Spring 2018/Operating Systems/Lab4/cmake-build-debug/CMakeFiles/Lab4.dir
