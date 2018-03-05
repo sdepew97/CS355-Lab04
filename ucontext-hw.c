@@ -176,7 +176,7 @@ int main(int argc, char **argv) {
     ctx[2].uc_link = &ctx[1];
     makecontext(&ctx[2], f2, 0);
 
-    swapcontext(&ctx[0], &ctx[1]);
+    //swapcontext(&ctx[0], &ctx[1]);
 
     return 0;
 }
