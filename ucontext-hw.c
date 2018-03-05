@@ -74,7 +74,7 @@ main (void) {
 
 
     //swapcontext(&ctx[0], &ctx[2]);
-    stcontext(&ctx[1]);
+    setcontext(&ctx[1]);
     printf("hello world\n");
     return 0;
 }
