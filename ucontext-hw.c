@@ -25,8 +25,9 @@ int main(int argc, char *argv[]) {
     uc.uc_link = &main;
 
     makecontext(&uc, f, 0);
-    setcontext(&uc);
-    perror("setcontext"); //setcontext() does not return on success
+//    setcontext(&uc);
+//    perror("setcontext"); //setcontext() does not return on success
+    swapcontext(&main, &uc);
     printf("Back in main\n");
     return 0;
 }
