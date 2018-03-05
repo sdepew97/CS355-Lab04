@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     uc.uc_stack.ss_size = STACKSIZE;
     uc.uc_stack.ss_flags = SS_DISABLE;
     sigemptyset(&(uc.uc_sigmask));
-    uc.uc_link = main;
+    uc.uc_link = &main;
 
     makecontext(&uc, f, 0);
     setcontext(&uc);
