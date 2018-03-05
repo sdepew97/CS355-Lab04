@@ -83,11 +83,12 @@
 #include <unistd.h>
 
 int main(int argc, const char *argv[]){
-    ucontext_t context;
-
-    getcontext(&context);
+    ucontext_t main;
+    printf("start");
+    getcontext(&main);
     puts("Hello world\n");
     sleep(1);
-    setcontext(&context);
+    setcontext(&main);
+    printf("end");
     return 0;
 }
