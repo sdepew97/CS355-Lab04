@@ -8,26 +8,27 @@
 
 void f(){
   printf("Hello World\n");
-    return;
 }
 
-int main(int argc, char *argv[]){
-  ucontext_t uc;
-  void *stack;
+int main(int argc, char *argv[]) {
+    ucontext_t uc;
+    ucontext_t main;
 
-  getcontext(&uc);
-  stack = malloc(STACKSIZE);
-  uc.uc_stack.ss_sp = stack;
-  uc.uc_stack.ss_size = STACKSIZE;
-  uc.uc_stack.ss_flags = SS_DISABLE;
-  sigemptyset(&(uc.uc_sigmask));
-  uc.uc_link = NULL;
+    void *stack;
 
-  makecontext(&uc, f, 0);
-  setcontext(&uc);
-  perror("setcontext"); //setcontext() does not return on success
-  printf("Back in main\n");
-  return 0;
+    getcontext(&uc);
+    stack = malloc(STACKSIZE);
+    uc.uc_stack.ss_sp = stack;
+    uc.uc_stack.ss_size = STACKSIZE;
+    uc.uc_stack.ss_flags = SS_DISABLE;
+    sigemptyset(&(uc.uc_sigmask));
+    uc.uc_link = main;
+
+    makecontext(&uc, f, 0);
+    setcontext(&uc);
+    perror("setcontext"); //setcontext() does not return on success
+    printf("Back in main\n");
+    return 0;
 }
 
 //#include <stdio.h>
